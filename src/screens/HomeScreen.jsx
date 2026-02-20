@@ -25,14 +25,6 @@ function HomeScreen({ onSelectRole }) {
         >
           요양보호사입니다
         </button>
-        <button
-          onClick={() => onSelectRole('certificate')}
-          className="w-full py-4 px-6 text-mobile-lg font-medium rounded-2xl
-            bg-slate-200 text-slate-700 border-2 border-slate-300
-            active:scale-[0.98] transition-transform"
-        >
-          경력증명서
-        </button>
       </div>
     </div>
   );

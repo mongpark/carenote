@@ -16,7 +16,6 @@ function App() {
 
   const handleSelectRole = (role) => {
     if (role === 'caregiver') setScreen('caregiver');
-    else if (role === 'certificate') setScreen('certificate');
     else setScreen('careWorker');
   };
 
@@ -26,13 +25,16 @@ function App() {
         <HomeScreen onSelectRole={handleSelectRole} />
       )}
       {screen === 'careWorker' && (
-        <CareWorkerScreen onBack={() => setScreen('home')} />
+        <CareWorkerScreen
+          onBack={() => setScreen('home')}
+          onGoToCertificate={() => setScreen('certificate')}
+        />
       )}
       {screen === 'caregiver' && (
         <CaregiverScreen onBack={() => setScreen('home')} />
       )}
       {screen === 'certificate' && (
-        <CertificateScreen onBack={() => setScreen('home')} />
+        <CertificateScreen onBack={() => setScreen('careWorker')} />
       )}
     </div>
   );

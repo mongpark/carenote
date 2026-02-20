@@ -17,7 +17,7 @@ const AMOUNT_STEPS = [
   { label: '+10만', delta: 100000 },
 ];
 
-function CareWorkerScreen({ onBack }) {
+function CareWorkerScreen({ onBack, onGoToCertificate }) {
   const today = new Date().toISOString().slice(0, 10);
 
   const [inputMode, setInputMode] = useState('day'); // 'day' | 'case'
@@ -379,9 +379,20 @@ function CareWorkerScreen({ onBack }) {
         ← 홈으로
       </button>
 
-      <h1 className="text-mobile-2xl font-bold text-teal-700 mb-4">
-        근무 기록
-      </h1>
+      <div className="flex items-center justify-between mb-4">
+        <h1 className="text-mobile-2xl font-bold text-teal-700">
+          근무 기록
+        </h1>
+        <button
+          type="button"
+          onClick={onGoToCertificate}
+          className="py-2 px-4 text-mobile-lg font-medium rounded-xl
+            bg-teal-100 text-teal-700 border-2 border-teal-200
+            active:scale-[0.98] transition-transform"
+        >
+          증명서
+        </button>
+      </div>
 
       {/* 입력 모드 토글 */}
       <div className="flex rounded-xl overflow-hidden border-2 border-teal-200 mb-6">

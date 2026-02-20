@@ -42,6 +42,7 @@ export function getDisplayId() {
 
 const DEFAULT_META = {
   userId: '',
+  name: null, // V2: 프로필 성명 자동 적용용
   phoneVerified: false,
   verifiedPhoneMasked: null,
   verifiedAt: null,

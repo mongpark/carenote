@@ -14,6 +14,7 @@ const KAKAO_HEIGHT = 1920;
 function CertificateScreen({ onBack }) {
   const [records, setRecords] = useState([]);
   const [meta, setMeta] = useState(null);
+  const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
   const [code, setCode] = useState('');
   const [toastVisible, setToastVisible] = useState(false);
@@ -177,6 +178,17 @@ function CertificateScreen({ onBack }) {
 
   const handleSaveKakaoImage = async () => {
     if (!templateRef.current) return;
+    const nameTrimmed = (name || '').trim();
+    if (!nameTrimmed) {
+      setToastMessage('성명을 입력해주세요');
+      setToastVisible(true);
+      return;
+    }
+    if (records.length < 1) {
+      setToastMessage('기록이 1개 이상 있어야 생성돼요');
+      setToastVisible(true);
+      return;
+    }
     setExporting(true);
     setExportType('image');
     try {
@@ -204,6 +216,17 @@ function CertificateScreen({ onBack }) {
 
   const handleSavePdf = async () => {
     if (!templateRef.current) return;
+    const nameTrimmed = (name || '').trim();
+    if (!nameTrimmed) {
+      setToastMessage('성명을 입력해주세요');
+      setToastVisible(true);
+      return;
+    }
+    if (records.length < 1) {
+      setToastMessage('기록이 1개 이상 있어야 생성돼요');
+      setToastVisible(true);
+      return;
+    }
     setExporting(true);
     setExportType('pdf');
     try {
@@ -247,12 +270,26 @@ function CertificateScreen({ onBack }) {
       <Toast message={toastMessage} visible={toastVisible} />
 
       <button onClick={onBack} className="text-mobile-lg text-teal-600 font-medium mb-6">
-        ← 홈으로
+        ← 근무 기록으로
       </button>
 
       <h1 className="text-mobile-2xl font-bold text-teal-700 mb-6">
         경력증명서
       </h1>
+
+      {/* 성명 입력 (매번 입력) */}
+      <div className="mb-6">
+        <label className="block text-mobile-lg font-semibold text-slate-700 mb-2">
+          성명
+        </label>
+        <input
+          type="text"
+          placeholder="예: 김OO"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          className="w-full py-4 px-4 text-mobile-xl rounded-xl border-2 border-slate-200"
+        />
+      </div>
 
       {/* 사용자 표시 ID */}
       <div className="mb-6 p-4 rounded-2xl bg-slate-100">
@@ -359,6 +396,7 @@ function CertificateScreen({ onBack }) {
               <>
                 <h3 className="font-bold text-base mb-4 text-center">돌봄노트 간병 경험 요약</h3>
                 <div className="space-y-2 text-sm">
+                  <p><strong>성명</strong> {(name || '').trim() || '-'}</p>
                   <p><strong>사용자 ID</strong> {displayId}</p>
                   <p><strong>본인확인</strong> {identityText}</p>
                   <p><strong>기록 시작일</strong> {certInfo.firstRecordDate || '-'}</p>
@@ -390,6 +428,7 @@ function CertificateScreen({ onBack }) {
               <>
                 <h3 className="font-bold text-base mb-4 text-center">돌봄노트 활동 요약 (센터 제출용)</h3>
                 <div className="space-y-2 text-sm">
+                  <p><strong>성명</strong> {(name || '').trim() || '-'}</p>
                   <p><strong>사용자 ID</strong> {displayId}</p>
                   <p><strong>본인확인</strong> {identityText}</p>
                   <p><strong>기록 시작일</strong> {certInfo.firstRecordDate || '-'}</p>
@@ -430,12 +469,17 @@ function CertificateScreen({ onBack }) {
 
       {/* 내보내기 버튼 */}
       <div className="space-y-3">
+        {records.length < 1 && (
+          <p className="text-mobile-lg text-amber-700 mb-2">
+            기록이 1개 이상 있어야 증명서를 생성할 수 있어요
+          </p>
+        )}
         <button
           type="button"
           onClick={handleSaveKakaoImage}
-          disabled={exporting}
+          disabled={exporting || records.length < 1}
           className="w-full py-5 text-mobile-xl font-bold rounded-2xl
-            bg-teal-500 text-white disabled:opacity-60
+            bg-teal-500 text-white disabled:opacity-60 disabled:cursor-not-allowed
             active:scale-[0.98] transition-transform"
         >
           {exportType === 'image' && exporting ? '저장 중...' : '카카오용 이미지 저장'}
@@ -443,9 +487,9 @@ function CertificateScreen({ onBack }) {
         <button
           type="button"
           onClick={handleSavePdf}
-          disabled={exporting}
+          disabled={exporting || records.length < 1}
           className="w-full py-5 text-mobile-xl font-bold rounded-2xl
-            bg-teal-600 text-white disabled:opacity-60
+            bg-teal-600 text-white disabled:opacity-60 disabled:cursor-not-allowed
             active:scale-[0.98] transition-transform"
         >
           {exportType === 'pdf' && exporting ? '저장 중...' : 'PDF 저장'}
